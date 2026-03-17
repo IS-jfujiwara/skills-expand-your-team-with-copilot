@@ -468,12 +468,100 @@ button {
   font-size: 0.85rem;
 }
 
+/* Visually hidden but accessible to screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 footer {
   text-align: center;
   margin-top: 20px;
   padding: 10px;
   color: var(--text-secondary);
   font-size: 0.8rem;
+}
+
+/* Social Share Buttons */
+.share-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+  margin-top: 6px;
+  border-top: 1px solid var(--border-light);
+}
+
+.share-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.share-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.share-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.share-twitter {
+  background-color: #000;
+  color: #fff;
+}
+
+.share-twitter:hover {
+  background-color: #333;
+}
+
+.share-facebook {
+  background-color: #1877f2;
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+.share-facebook:hover {
+  background-color: #166fe5;
+}
+
+.share-whatsapp {
+  background-color: #25d366;
+  color: #fff;
+}
+
+.share-whatsapp:hover {
+  background-color: #22c45c;
+}
+
+.share-copy {
+  background-color: var(--border);
+  color: var(--text-primary);
+}
+
+.share-copy:hover {
+  background-color: var(--border-focus);
 }
 
 /* Search and Filter Components - Updated for Sidebar */
