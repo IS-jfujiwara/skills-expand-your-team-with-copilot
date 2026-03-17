@@ -26,6 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeLoginModal = document.querySelector(".close-login-modal");
   const loginMessage = document.getElementById("login-message");
 
+  // School name used in share messages
+  const SCHOOL_NAME = "Mergington High School";
+
   // Activity categories with corresponding colors
   const activityTypes = {
     sports: { label: "Sports", color: "#e8f5e9", textColor: "#2e7d32" },
@@ -580,6 +583,23 @@ document.addEventListener("DOMContentLoaded", () => {
         `
         }
       </div>
+      <div class="share-section">
+        <span class="share-label">Share:</span>
+        <div class="share-buttons">
+          <button class="share-btn share-twitter tooltip" data-activity="${name}" aria-label="Share on X (Twitter)">
+            𝕏<span class="tooltip-text">Share on X (Twitter)</span>
+          </button>
+          <button class="share-btn share-facebook tooltip" data-activity="${name}" aria-label="Share on Facebook">
+            f<span class="tooltip-text">Share on Facebook</span>
+          </button>
+          <button class="share-btn share-whatsapp tooltip" data-activity="${name}" aria-label="Share on WhatsApp">
+            💬<span class="tooltip-text">Share on WhatsApp</span>
+          </button>
+          <button class="share-btn share-copy tooltip" data-activity="${name}" aria-label="Copy link">
+            🔗<span class="tooltip-text">Copy link</span>
+          </button>
+        </div>
+      </div>
     `;
 
     // Add click handlers for delete buttons
@@ -598,7 +618,77 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    // Add click handlers for share buttons
+    activityCard.querySelector(".share-twitter").addEventListener("click", handleShareTwitter);
+    activityCard.querySelector(".share-facebook").addEventListener("click", handleShareFacebook);
+    activityCard.querySelector(".share-whatsapp").addEventListener("click", handleShareWhatsApp);
+    activityCard.querySelector(".share-copy").addEventListener("click", handleShareCopy);
+
     activitiesList.appendChild(activityCard);
+  }
+
+  // Helper to build a share message for an activity
+  function getShareText(name, details) {
+    return `Check out "${name}" at ${SCHOOL_NAME}! ${details.description} Schedule: ${details.schedule}`;
+  }
+
+  // Share on X (Twitter)
+  function handleShareTwitter(e) {
+    const name = e.currentTarget.dataset.activity;
+    const details = allActivities[name];
+    const text = getShareText(name, details);
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(window.location.href)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  // Share on Facebook
+  function handleShareFacebook(e) {
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  // Share on WhatsApp
+  function handleShareWhatsApp(e) {
+    const name = e.currentTarget.dataset.activity;
+    const details = allActivities[name];
+    const text = getShareText(name, details) + "\n" + window.location.href;
+    const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
+
+  // Copy share text to clipboard
+  async function handleShareCopy(e) {
+    const button = e.currentTarget;
+    const name = button.dataset.activity;
+    const details = allActivities[name];
+    const text = getShareText(name, details) + "\n" + window.location.href;
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (err) {
+      // Fallback for browsers without clipboard API
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+    }
+    // Visual feedback
+    const originalContent = button.innerHTML;
+    button.textContent = "✓";
+    setTimeout(() => {
+      button.innerHTML = originalContent;
+    }, 1500);
+    // Screen reader announcement
+    const announcement = document.getElementById("sr-announcement");
+    if (announcement) {
+      announcement.textContent = `Link for "${name}" copied to clipboard.`;
+      setTimeout(() => {
+        announcement.textContent = "";
+      }, 3000);
+    }
   }
 
   // Event listeners for search and filter
